@@ -1,6 +1,8 @@
 import javax.xml.crypto.Data;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 //final constanta
@@ -189,6 +191,50 @@ public class Database{
 
                 Person osoba = new Person(FirstName,LastName,rc,dnar);
                 persons.add(osoba);
+            }
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return persons;
+    }
+
+    public List<Person> getAllAdults(LocalDate datum){
+
+        Connection conn = getConnection();
+        List<Person> persons = new ArrayList<>();
+        try {
+            PreparedStatement statement = conn.prepareStatement("Select * from person where dnar < (? - interval 18 year)");
+            statement.setString(1,datum.toString());
+            ResultSet resultset = statement.executeQuery();
+            while (resultset.next()){
+                String FirstName= resultset.getString("FirstName");
+                String LastName =resultset.getString("LastName");
+                Date dnar= resultset.getDate("dnar");
+                String rc=resultset.getString("rc");
+
+                Person osoba = new Person(FirstName,LastName,rc,dnar);
+                persons.add(osoba);
+            }
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return persons;
+    }
+
+    public HashSet<String> getFirstName(){
+        Connection conn = getConnection();
+        HashSet<String> persons = new HashSet<String>();
+        try {
+            PreparedStatement statement = conn.prepareStatement("Select * from person");
+            ResultSet resultset = statement.executeQuery();
+            while (resultset.next()){
+                String FirstName= resultset.getString("FirstName");
+
+                persons.add(FirstName);
             }
             conn.close();
         } catch (SQLException e) {

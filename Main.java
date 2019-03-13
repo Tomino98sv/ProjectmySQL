@@ -1,10 +1,9 @@
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class Main {
 
@@ -12,7 +11,7 @@ public class Main {
 
         SimpleDateFormat dateFormatA = new SimpleDateFormat("dd.MM.yyyy");
         Database database=new Database("root","","jdbc:mysql://localhost:3306/dbusers");
-        database.deleteAllUserRecord();
+        //database.deleteAllUserRecord();
         database=new Database("Sigmund_Freud","0101","jdbc:mysql://localhost:3306/dbusers");
         Date date1 = null;
 
@@ -102,5 +101,20 @@ public class Main {
                     System.out.println(persons.get(a).getFname()+"\t"+persons.get(a).getLname()+"\t"+persons.get(a).getDob()+"\t"+persons.get(a).getPin());
 
                 }
+
+                LocalDate localDate = LocalDate.now();
+                List<Person> adolts = database.getAllAdults(localDate);
+
+        System.out.println("adolts");
+                for (int a=0; a<adolts.size();a++){
+                    System.out.println(adolts.get(a).getFname()+"\t"+adolts.get(a).getLname()+"\t"+adolts.get(a).getDob()+"\t"+adolts.get(a).getPin());
+                }
+
+        HashSet<String> krstne = database.getFirstName();
+        for (String k: krstne){
+            System.out.println(k);
+        }
+
+
     }
 }
